@@ -37,3 +37,21 @@ Your task is to provide feedback to the person that wrote the code in this repos
 - **Explicit return type** (`searchApiClient.ts`): `fetchSearchResultsFromAPI` returns `Promise<Cat[]>`, so callers get typed results.
 - **Error message** (`CatSearch.tsx`): wording now says the failure was while searching for cat breeds.
 - **Readability** (`CatSearch.tsx`): added a component doc block, state comments, and notes on the effect, debounce and abort cleanup. Removed a stray `;` after `useEffect(() => {`.
+
+## Advanced improvements
+
+- **Tailwind CSS v4** (`vite.config.js`, `src/styles/index.css`): added via `@tailwindcss/vite`. `CatSearch` is centered (`mx-auto max-w-md min-h-screen`) with spacing, a styled input and muted feedback/error text. The BEM class names are kept as hooks.
+- **Hook extracted** (`hooks/useCatSearch.ts`): all state, debounce, abort and error handling moved out of the component, which is now just markup. The effect depends on the trimmed `term`, so trailing whitespace no longer re-triggers a search. `MIN_CHARS` and `DEBOUNCE_MS` are exported.
+- **Unit tests** (Vitest + Testing Library + jsdom, run with `pnpm test`):
+  - `api/searchApiClient.test.ts`: URL encoding, abort signal, breed filtering, non-2xx throws.
+  - `hooks/useCatSearch.test.ts`: min length, debounce, hits, error, abort on term change (fake timers).
+  - `components/CatSearch.test.tsx`: hint, loading, hits, "No hits", error as `<p role="alert">` (hook mocked).
+- **Directory layout**:
+
+        src/
+          api/          searchApiClient.ts (+ test)
+          components/   CatSearch.tsx (+ test)
+          hooks/        useCatSearch.ts (+ test)
+          test/         setup.ts (jest-dom matchers)
+          styles/       index.css (Tailwind entry)
+          main.tsx
