@@ -5,6 +5,7 @@ export function CatSearch() {
   const [valid, setValid] = useState(false);
   const [hits, setHits] = useState<Cat[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   const searchTermOnChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -18,10 +19,12 @@ export function CatSearch() {
       setValid(false);
       setHits([]);
       setLoading(false);
+      setError(null);
       return;
     }
     setValid(true);
     setLoading(true);
+    setError(null);
     let ignore = false;
     // debounce: only search once typing pauses for 300ms
     const timeout = setTimeout(() => {
@@ -30,7 +33,10 @@ export function CatSearch() {
           if (!ignore) setHits(hits);
         })
         .catch((error) => {
-          if (!ignore) console.error(error);
+          if (ignore) return;
+          console.error(error);
+          setHits([]);
+          setError("Something went wrong while searching. Please try again.");
         })
         .finally(() => {
           if (!ignore) setLoading(false);
@@ -59,8 +65,10 @@ export function CatSearch() {
       <div>
         {loading
           ? "Loading..."
+          : error
+          ? <div role="alert">{error}</div>
           : hits.length > 0
-          ? hits.map((hit, i) => <div key={i}>🐈 {hit.breed}</div>)
+          ? hits.map((hit, i) => <div key={`${hit.breed}-${i}`}>🐈 {hit.breed}</div>)
           : "No hits"}
       </div>
     </div>
