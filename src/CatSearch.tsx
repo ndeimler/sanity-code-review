@@ -88,7 +88,7 @@ export function CatSearch() {
           <ul>
             {hits.length > 0
               ? hits.map((hit, i) => <li key={`${hit.breed}-${i}`} className="cat-search__result"><span aria-hidden="true">🐈</span> {hit.breed}</li>)
-              : !loading && "No hits"}
+              : valid && "No hits"}
           </ul>
         )}
       </div>
