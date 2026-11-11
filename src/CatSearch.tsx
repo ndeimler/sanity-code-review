@@ -24,15 +24,17 @@ export function CatSearch() {
 
   // Runs whenever the term changes: resets state, then fires a debounced search.
   useEffect(() => {
-    // Too short to search: just make sure we aren't left showing "Loading...".
+    // Always start from a clean slate: no stale results or error.
+    setHits([]);
+    setError(null);
+
+    // Too short to search: make sure we aren't left showing "Loading...".
     if (!valid) {
       setLoading(false);
       return;
     }
 
-    setHits([]);
     setLoading(true);
-    setError(null);
 
     // Lets the cleanup below cancel an in-flight request when the term changes.
     const controller = new AbortController();
@@ -47,7 +49,6 @@ export function CatSearch() {
           // Aborted by the cleanup (newer search started): not a real failure.
           if (error.name === "AbortError") return;
           console.error(error);
-          setHits([]);
           setLoading(false);
           setError("Something went wrong while searching for cat breeds. Please try again.");
         })
