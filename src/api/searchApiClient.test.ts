@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { fetchSearchResultsFromAPI } from "./searchApiClient";
+import { fetchSearchResultsFromAPI, clearSearchCache } from "./searchApiClient";
 
 const cat = (breed: string) => ({ breed, country: "", origin: "", "body type": "", coat: "", pattern: "" });
 
@@ -9,7 +9,10 @@ function mockFetch(response: Partial<Response>) {
   return fn;
 }
 
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => {
+  vi.unstubAllGlobals();
+  clearSearchCache();
+});
 
 describe("fetchSearchResultsFromAPI", () => {
   it("url-encodes the term and passes the abort signal", async () => {
@@ -31,5 +34,20 @@ describe("fetchSearchResultsFromAPI", () => {
   it("throws on a non-2xx response", async () => {
     mockFetch({ ok: false, status: 500 });
     await expect(fetchSearchResultsFromAPI("sia")).rejects.toThrow("500");
+  });
+
+  it("serves repeat searches (any casing) from cache without refetching", async () => {
+    const fn = mockFetch({ ok: true, json: async () => [cat("Siamese")] });
+    await fetchSearchResultsFromAPI("siam");
+    const again = await fetchSearchResultsFromAPI("SIAM");
+    expect(fn).toHaveBeenCalledTimes(1);
+    expect(again.map((c) => c.breed)).toEqual(["Siamese"]);
+  });
+
+  it("does not cache failures", async () => {
+    const fn = mockFetch({ ok: false, status: 500 });
+    await expect(fetchSearchResultsFromAPI("siam")).rejects.toThrow();
+    await expect(fetchSearchResultsFromAPI("siam")).rejects.toThrow();
+    expect(fn).toHaveBeenCalledTimes(2);
   });
 });

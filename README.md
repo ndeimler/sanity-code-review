@@ -55,3 +55,4 @@ Your task is to provide feedback to the person that wrote the code in this repos
           test/         setup.ts (jest-dom matchers)
           styles/       index.css (Tailwind entry)
           main.tsx
+- **Result caching** (`api/searchApiClient.ts`): successful searches are cached in memory by lowercased term, so repeat searches (e.g. backspacing) skip the API. Failures and aborted requests are not cached. The cache is unbounded and lasts until page reload. (A prefetch-everything alternative lives on the `prefetch-cache` branch.)
