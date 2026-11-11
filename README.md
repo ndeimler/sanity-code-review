@@ -26,3 +26,11 @@ Your task is to provide feedback to the person that wrote the code in this repos
 - **List keys** (`CatSearch.tsx`): list items use `${hit.breed}-${index}` as `key`. The breed keeps keys stable, and the index suffix guarantees uniqueness if the API ever returns duplicate breeds.
 - **Error state** (`CatSearch.tsx`): a failed request clears the results and shows an error message (`role="alert"`) instead of stale results or "No hits". The error is still logged to the console.
 - **Null root element** (`main.tsx`): `getElementById("root")!` fixes the strict-mode type error.
+
+## Improvements
+
+- **Request cancellation** (`CatSearch.tsx`, `searchApiClient.ts`): each search uses an `AbortController`, aborted when the term changes or the component unmounts, so slow responses can't overwrite newer results. `fetchSearchResultsFromAPI` takes an optional `signal`.
+- **Loading in feedback area** (`CatSearch.tsx`): "Loading..." now shows in the feedback message instead of the results list, and "No hits" is hidden while loading.
+- **Error rendering** (`CatSearch.tsx`): on error the results area renders a `<p role="alert">` instead of a `<ul>`. The error handler also clears `loading`, which previously stayed `true` and hid the error.
+- **Search input** (`CatSearch.tsx`): input is `type="search"`.
+- **BEM class names** (`CatSearch.tsx`): `cat-search__input`, `__feedback`, `__results`, `__result`.
