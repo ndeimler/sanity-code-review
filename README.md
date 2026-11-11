@@ -55,3 +55,4 @@ Your task is to provide feedback to the person that wrote the code in this repos
           test/         setup.ts (jest-dom matchers)
           styles/       index.css (Tailwind entry)
           main.tsx
+- **Prefetched full list** (`api/searchApiClient.ts`, `main.tsx`): an empty query returns all ~100 cats (~15KB), so the list is fetched once at startup and every search filters it locally (breed contains term, case-insensitive). Concurrent searches share one request; failures are not cached and are retried on the next search. Aborted searches reject with `AbortError`. The cache lasts until page reload.
