@@ -69,7 +69,7 @@ export function CatSearch() {
           ? <div role="alert">{error}</div>
           : hits.length > 0
           ? hits.map((hit, i) => <div key={`${hit.breed}-${i}`}>🐈 {hit.breed}</div>)
-          : "No hits"}
+          : valid && "No hits"}
       </div>
     </div>
   );
