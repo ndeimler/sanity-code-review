@@ -34,3 +34,6 @@ Your task is to provide feedback to the person that wrote the code in this repos
 - **Error rendering** (`CatSearch.tsx`): on error the results area renders a `<p role="alert">` instead of a `<ul>`. The error handler also clears `loading`, which previously stayed `true` and hid the error.
 - **Search input** (`CatSearch.tsx`): input is `type="search"`.
 - **BEM class names** (`CatSearch.tsx`): `cat-search__input`, `__feedback`, `__results`, `__result`.
+- **Explicit return type** (`searchApiClient.ts`): `fetchSearchResultsFromAPI` returns `Promise<Cat[]>`, so callers get typed results.
+- **Error message** (`CatSearch.tsx`): wording now says the failure was while searching for cat breeds.
+- **Readability** (`CatSearch.tsx`): added a component doc block, state comments, and notes on the effect, debounce and abort cleanup. Removed a stray `;` after `useEffect(() => {`.

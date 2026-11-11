@@ -42,7 +42,7 @@ export function CatSearch() {
     const timeout = setTimeout(() => {
       fetchSearchResultsFromAPI(term, controller.signal)
         .then((results) => {
-          setHits(Array.isArray(results) ? results : []);
+          setHits(results);
           setLoading(false);
         })
         .catch((error) => {
@@ -73,13 +73,13 @@ export function CatSearch() {
           aria-labelledby="cat-search-heading"
         />
       </div>
-      <div className="cat-search__feedback">
+      <div className="cat-search__feedback" aria-live="polite">
         <p>
-        {valid === false
+        {!valid
           ? "Type at least two characters to start searching"
           : loading
           ? "Loading..."
-          : `You searched for ${searchTerm}`}
+          : `You searched for ${term}`}
         </p>
       </div>
       <div className="cat-search__results">

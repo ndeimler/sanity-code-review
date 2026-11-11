@@ -7,7 +7,7 @@ export interface Cat {
   pattern: string;
 }
 
-export async function fetchSearchResultsFromAPI(searchTerm: string, signal?: AbortSignal) {
+export async function fetchSearchResultsFromAPI(searchTerm: string, signal?: AbortSignal): Promise<Cat[]> {
   // Note: this API seems a bit unstable and sometimes it takes a long time to respond, especially
   // for broad searches
   return fetch(
