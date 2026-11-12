@@ -32,7 +32,7 @@ export function CatSearch() {
         .then((hits) => {
           if (!ignore) setHits(hits);
         })
-        .catch((error) => {
+        .catch((error: unknown) => {
           if (ignore) return;
           console.error(error);
           setHits([]);

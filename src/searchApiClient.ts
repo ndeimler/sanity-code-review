@@ -7,11 +7,13 @@ export interface Cat {
   pattern: string;
 }
 
+const API_URL = import.meta.env.VITE_CAT_API_URL ?? "https://cat-api.sanity.build/cats";
+
 export async function fetchSearchResultsFromAPI(searchTerm: string) {
   // Note: this API seems a bit unstable and sometimes it takes a long time to respond, especially
   // for broad searches
   return fetch(
-    `https://cat-api.sanity.build/cats?query=${encodeURIComponent(searchTerm)}`
+    `${API_URL}?query=${encodeURIComponent(searchTerm)}`
   ).then((res) => {
     if (!res.ok) throw new Error(`Cat API request failed: ${res.status}`);
     return res.json();
